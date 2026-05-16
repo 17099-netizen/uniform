@@ -1,30 +1,35 @@
 const puppeteer = require('puppeteer');
 
-(async () => {
-  try {
-    const browser = await puppeteer.launch({
-      headless: "new",
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox'
-      ]
-    });
+async function run() {
+  const browser = await puppeteer.launch({
+    headless: "new",
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox'
+    ]
+  });
 
-    const page = await browser.newPage();
+  while (true) {
+    try {
+      const page = await browser.newPage();
 
-    await page.goto(
-      'https://dkt.gt.tc/admin/cron_uniform?i=1',
-      {
-        waitUntil: 'domcontentloaded',
-        timeout: 60000
-      }
-    );
+      await page.goto(
+        'https://dkt.gt.tc/admin/cron_uniform?i=1',
+        {
+          waitUntil: 'domcontentloaded',
+          timeout: 60000
+        }
+      );
 
-    console.log('SUCCESS');
+      console.log('SUCCESS', new Date().toISOString());
 
-    await browser.close();
-  } catch (err) {
-    console.error(err);
-    process.exit(1);
+      await page.close();
+    } catch (e) {
+      console.log(e);
+    }
+
+    await new Promise(r => setTimeout(r, 120000));
   }
-})();
+}
+
+run();
