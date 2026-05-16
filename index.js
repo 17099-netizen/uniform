@@ -1,21 +1,30 @@
 const puppeteer = require('puppeteer');
 
 (async () => {
-  const browser = await puppeteer.launch({
-    headless: true
-  });
+  try {
+    const browser = await puppeteer.launch({
+      headless: "new",
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox'
+      ]
+    });
 
-  const page = await browser.newPage();
+    const page = await browser.newPage();
 
-  await page.goto(
-    'https://dkt.gt.tc/admin/cron_uniform?i=1',
-    {
-      waitUntil: 'networkidle2',
-      timeout: 0
-    }
-  );
+    await page.goto(
+      'https://dkt.gt.tc/admin/cron_uniform?i=1',
+      {
+        waitUntil: 'domcontentloaded',
+        timeout: 60000
+      }
+    );
 
-  console.log('SUCCESS');
+    console.log('SUCCESS');
 
-  await browser.close();
+    await browser.close();
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
 })();
