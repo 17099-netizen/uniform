@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 
-async function run() {
+(async () => {
   const browser = await puppeteer.launch({
     headless: "new",
     args: [
@@ -9,27 +9,17 @@ async function run() {
     ]
   });
 
-  while (true) {
-    try {
-      const page = await browser.newPage();
+  const page = await browser.newPage();
 
-      await page.goto(
-        'https://dkt.gt.tc/admin/cron_uniform?i=1',
-        {
-          waitUntil: 'domcontentloaded',
-          timeout: 60000
-        }
-      );
-
-      console.log('SUCCESS', new Date().toISOString());
-
-      await page.close();
-    } catch (e) {
-      console.log(e);
+  await page.goto(
+    'https://dkt.gt.tc/admin/cron_uniform?i=1',
+    {
+      waitUntil: 'domcontentloaded',
+      timeout: 60000
     }
+  );
 
-    await new Promise(r => setTimeout(r, 120000));
-  }
-}
+  console.log('SUCCESS');
 
-run();
+  await browser.close();
+})();
