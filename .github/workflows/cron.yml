@@ -2,11 +2,12 @@ name: Wake Website
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "30 19 * * *"
 
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 360
 
     steps:
       - uses: actions/checkout@v4
